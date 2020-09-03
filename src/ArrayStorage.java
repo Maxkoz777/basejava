@@ -23,7 +23,7 @@ public class ArrayStorage {
     }
 
     Object get(String uuid) {
-        for (Resume resume : storage){
+        for (Resume resume : storage) {
             if (resume == null || resume.uuid.equals(uuid)) {
                 return resume;
             }
@@ -34,12 +34,12 @@ public class ArrayStorage {
     void delete(String uuid) {
         int index = Integer.MIN_VALUE;
         for (int i = 0; i < storage.length; i++) {
-            if (storage[i].uuid.equals(uuid)){
+            if (storage[i].uuid.equals(uuid)) {
                 index = i;
                 break;
             }
         }
-        if (index != Integer.MIN_VALUE){
+        if (index != Integer.MIN_VALUE) {
             for (int i = index; i < storage.length - 1; i++) {
                 if (storage[i] == null) {
                     break;
