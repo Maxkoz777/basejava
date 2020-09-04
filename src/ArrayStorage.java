@@ -6,23 +6,21 @@ import java.util.Objects;
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
+    private int size = 0;
 
     void clear() {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                break;
-            }
+        for (int i = 0; i < size; i++) {
             storage[i] = null;
         }
+        size = 0;
     }
 
     void save(Resume r) {
-        storage[(int) Arrays.stream(storage)
-                .filter(Objects::nonNull)
-                .count()] = r;
+        storage[size] = r;
+        size++;
     }
 
-    Object get(String uuid) {
+    Resume get(String uuid) {
         for (Resume resume : storage) {
             if (resume == null || resume.uuid.equals(uuid)) {
                 return resume;
@@ -32,20 +30,21 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        int index = Integer.MIN_VALUE;
-        for (int i = 0; i < storage.length; i++) {
+        int index = -1;
+        for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
                 index = i;
                 break;
             }
         }
-        if (index != Integer.MIN_VALUE) {
-            for (int i = index; i < storage.length - 1; i++) {
+        if (index != -1) {
+            for (int i = index; i < size; i++) {
                 if (storage[i] == null) {
                     break;
                 }
                 storage[i] = storage[i + 1];
             }
+            size--;
         }
     }
 
@@ -59,8 +58,6 @@ public class ArrayStorage {
     }
 
     int size() {
-        return (int) Arrays.stream(storage)
-                .filter(Objects::nonNull)
-                .count();
+        return size;
     }
 }
