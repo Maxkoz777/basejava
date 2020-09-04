@@ -1,6 +1,3 @@
-import java.util.Arrays;
-import java.util.Objects;
-
 /**
  * Array based storage for Resumes
  */
@@ -21,9 +18,9 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        for (Resume resume : storage) {
-            if (resume == null || resume.uuid.equals(uuid)) {
-                return resume;
+        for (int i = 0; i < size; i++) {
+            if (storage[i].uuid.equals(uuid)) {
+                return storage[i];
             }
         }
         return null;
@@ -38,10 +35,7 @@ public class ArrayStorage {
             }
         }
         if (index != -1) {
-            for (int i = index; i < size; i++) {
-                if (storage[i] == null) {
-                    break;
-                }
+            for (int i = index; i < size - 1; i++) {
                 storage[i] = storage[i + 1];
             }
             size--;
@@ -52,9 +46,9 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        return Arrays.stream(storage)
-                .filter(Objects::nonNull)
-                .toArray(Resume[]::new);
+        Resume[] resume = new Resume[size];
+        System.arraycopy(storage, 0, resume, 0, size);
+        return resume;
     }
 
     int size() {
