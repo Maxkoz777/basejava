@@ -35,8 +35,8 @@ public class ArrayStorage {
             }
         }
         if (index != -1) {
-            for (int i = index; i < size - 1; i++) {
-                storage[i] = storage[i + 1];
+            if (size - 1 - index >= 0) {
+                System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
             }
             size--;
         }
