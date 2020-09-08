@@ -1,3 +1,7 @@
+package webapp.storage;
+
+import webapp.model.Resume;
+
 /**
  * Array based storage for Resumes
  */
@@ -5,19 +9,25 @@ public class ArrayStorage {
     Resume[] storage = new Resume[10000];
     private int size = 0;
 
-    void clear() {
+    public void clear() {
         for (int i = 0; i < size; i++) {
             storage[i] = null;
         }
         size = 0;
     }
+    
+    public void update(Resume resume){
 
-    void save(Resume r) {
-        storage[size] = r;
-        size++;
     }
 
-    Resume get(String uuid) {
+    public void save(Resume r) {
+        if (isPresent(r) == -1) {
+            storage[size] = r;
+            size++;
+        }
+    }
+
+    public Resume get(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
                 return storage[i];
@@ -26,14 +36,24 @@ public class ArrayStorage {
         return null;
     }
 
-    void delete(String uuid) {
+    /**
+     * @param resume
+     * @return index of resume in storage if it is present there and -1 if not
+     */
+
+    private int isPresent(Resume resume){
         int index = -1;
         for (int i = 0; i < size; i++) {
-            if (storage[i].uuid.equals(uuid)) {
+            if (storage[i] == resume) {
                 index = i;
                 break;
             }
         }
+        return index;
+    }
+
+    public void delete(String uuid) {
+        int index = isPresent(new Resume(uuid));
         if (index != -1) {
             if (size - 1 - index >= 0) {
                 System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
@@ -45,13 +65,13 @@ public class ArrayStorage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    Resume[] getAll() {
+    public Resume[] getAll() {
         Resume[] resume = new Resume[size];
         System.arraycopy(storage, 0, resume, 0, size);
         return resume;
     }
 
-    int size() {
+    public int size() {
         return size;
     }
 }
