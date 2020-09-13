@@ -1,6 +1,6 @@
-package webapp.com.urise.storage;
+package com.urise.webapp.storage;
 
-import webapp.com.urise.model.Resume;
+import com.urise.webapp.model.Resume;
 
 public interface Storage {
     void clear();

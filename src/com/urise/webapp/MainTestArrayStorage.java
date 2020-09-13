@@ -1,8 +1,8 @@
-package webapp.com.urise;
+package com.urise.webapp;
 
-import webapp.com.urise.model.Resume;
-import webapp.com.urise.storage.ArrayStorage;
-import webapp.com.urise.storage.Storage;
+import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.ArrayStorage;
+import com.urise.webapp.storage.Storage;
 
 /**
  * Test for your webapp.com.urise.storage.ArrayStorage implementation

@@ -1,4 +1,4 @@
-package webapp.com.urise.model;
+package com.urise.webapp.model;
 
 import java.util.Objects;
 
