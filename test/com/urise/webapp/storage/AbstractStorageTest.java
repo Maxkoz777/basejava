@@ -3,6 +3,7 @@ package com.urise.webapp.storage;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.*;
+import com.urise.webapp.storage.serializer.ObjectStreamSerializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -58,7 +59,7 @@ class AbstractStorageTest {
 
     @BeforeEach
     void setUp() {
-        storage = new ObjectStreamStorage(STORAGE_DIR);
+        storage = new PathStorage(STORAGE_DIR.getAbsolutePath(), new ObjectStreamSerializer());
         storage.clear();
         storage.save(R1);
         storage.save(R2);

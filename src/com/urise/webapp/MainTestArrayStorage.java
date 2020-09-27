@@ -1,11 +1,8 @@
 package com.urise.webapp;
 
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.ObjectStreamStorage;
 import com.urise.webapp.storage.SortedArrayStorage;
 import com.urise.webapp.storage.Storage;
-
-import java.io.File;
 
 /**
  * Test for your webapp.com.urise.storage.ArrayStorage implementation
