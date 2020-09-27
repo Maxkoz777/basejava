@@ -6,12 +6,15 @@ import com.urise.webapp.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.time.Month;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class AbstractStorageTest {
+
+    public static final File STORAGE_DIR = new File("C:\\Users\\DNS\\IdeaProjects\\basejava\\storage");
 
     protected Storage storage;
 
@@ -55,7 +58,7 @@ class AbstractStorageTest {
 
     @BeforeEach
     void setUp() {
-        storage = new SortedArrayStorage();
+        storage = new ObjectStreamStorage(STORAGE_DIR);
         storage.clear();
         storage.save(R1);
         storage.save(R2);
@@ -79,7 +82,7 @@ class AbstractStorageTest {
     void update() {
         Resume newResume = new Resume(UUID_1, "NEW");
         storage.update(newResume);
-        assertSame(newResume, storage.get(UUID_1));
+        assertEquals(newResume, storage.get(UUID_1));
     }
 
     @Test
