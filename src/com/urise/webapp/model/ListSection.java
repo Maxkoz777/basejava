@@ -19,6 +19,9 @@ public class ListSection extends Section{
         return items;
     }
 
+    public ListSection() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

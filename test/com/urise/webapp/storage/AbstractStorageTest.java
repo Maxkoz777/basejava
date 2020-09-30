@@ -3,7 +3,7 @@ package com.urise.webapp.storage;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.*;
-import com.urise.webapp.storage.serializer.ObjectStreamSerializer;
+import com.urise.webapp.storage.serializer.XmlStreamSerializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +11,8 @@ import java.io.File;
 import java.time.Month;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AbstractStorageTest {
 
@@ -59,7 +60,7 @@ class AbstractStorageTest {
 
     @BeforeEach
     void setUp() {
-        storage = new PathStorage(STORAGE_DIR.getAbsolutePath(), new ObjectStreamSerializer());
+        storage = new PathStorage(STORAGE_DIR.getAbsolutePath(), new XmlStreamSerializer());
         storage.clear();
         storage.save(R1);
         storage.save(R2);
