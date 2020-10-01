@@ -28,7 +28,6 @@ public class ListSection extends Section{
         if (o == null || getClass() != o.getClass()) return false;
 
         ListSection that = (ListSection) o;
-
         return Objects.equals(items, that.items);
     }
 

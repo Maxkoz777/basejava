@@ -1,25 +1,30 @@
 package com.urise.webapp;
 
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.SortedArrayStorage;
+import com.urise.webapp.storage.PathStorage;
 import com.urise.webapp.storage.Storage;
+import com.urise.webapp.storage.serializer.XmlStreamSerializer;
+
+import java.io.File;
 
 /**
  * Test for your webapp.com.urise.storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-    static final Storage ARRAY_STORAGE = new SortedArrayStorage();
+    public static final File STORAGE_DIR = new File("C:\\Users\\DNS\\IdeaProjects\\basejava\\storage");
+
+    static final Storage ARRAY_STORAGE = new PathStorage(STORAGE_DIR.getAbsolutePath(), new XmlStreamSerializer());
+
     public static void main(String[] args) {
-        Resume r1 = new Resume("dummy");
-        r1.setUuid("uuid1");
-        Resume r2 = new Resume("dummy");
-        r2.setUuid("uuid2");
-        Resume r3 = new Resume("dummy");
-        r3.setUuid("uuid3");
+        Resume r1 = new Resume("uuid1", "dummy");
+        Resume r2 = new Resume("uuid2", "dummy");
+        Resume r3 = new Resume("uuid3", "dummy");
 
         ARRAY_STORAGE.save(r1);
         ARRAY_STORAGE.save(r2);
         ARRAY_STORAGE.save(r3);
+
+        System.out.println(r1.equals(new Resume("uuid1", "dummy")));
 
         System.out.println("Get r1: " + ARRAY_STORAGE.get(r1.getUuid()));
         System.out.println("Size: " + ARRAY_STORAGE.size());
