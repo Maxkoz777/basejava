@@ -24,6 +24,14 @@ public class Organization implements Serializable {
     private Link homePage;
     private List<Position> positions;
 
+    public Link getHomePage() {
+        return homePage;
+    }
+
+    public List<Position> getPositions() {
+        return positions;
+    }
+
     public Organization() {
     }
 
@@ -33,7 +41,7 @@ public class Organization implements Serializable {
 
     public Organization(String name, String url) {
         homePage = new Link(name, url);
-        positions = null;
+        positions = new ArrayList<>();
     }
 
     public Organization(Link homePage, List<Position> positions) {
@@ -67,7 +75,23 @@ public class Organization implements Serializable {
             this.startDate = startDate;
             this.endDate = endDate;
             this.title = title;
-            this.description = description;
+            this.description = description == null ? "" : description;
+        }
+
+        public LocalDate getStartDate() {
+            return startDate;
+        }
+
+        public LocalDate getEndDate() {
+            return endDate;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getDescription() {
+            return description;
         }
 
         @Override
