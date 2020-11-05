@@ -18,11 +18,24 @@ import static com.urise.webapp.util.DateUtil.of;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
+    public static final Organization EMPTY = new Organization("", "", Position.EMPTY);
+
     private Link homePage;
-    private List<Position> positions;
+    private List<Position> positions = new ArrayList<>();
+
+    public Organization() {
+    }
+
+    public Organization(String name, String url, Position... positions) {
+        this(new Link(name, url), Arrays.asList(positions));
+    }
+
+    public Organization(Link homePage, List<Position> positions) {
+        this.homePage = homePage;
+        this.positions = positions;
+    }
 
     public Link getHomePage() {
         return homePage;
@@ -32,27 +45,33 @@ public class Organization implements Serializable {
         return positions;
     }
 
-    public Organization() {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Organization that = (Organization) o;
+        return Objects.equals(homePage, that.homePage) &&
+                Objects.equals(positions, that.positions);
     }
 
-    public Organization(String name, String url, Position... positions) {
-        this(new Link(name, url), Arrays.asList(positions));
+    @Override
+    public int hashCode() {
+        return Objects.hash(homePage, positions);
     }
 
-    public Organization(String name, String url) {
-        homePage = new Link(name, url);
-        positions = new ArrayList<>();
+    @Override
+    public String toString() {
+        return "Organization(" + homePage + "," + positions + ')';
     }
 
-    public Organization(Link homePage, List<Position> positions) {
-        this.homePage = homePage;
-        this.positions = positions;
-    }
-
+    /**
+     * gkislin
+     * 28.07.2016
+     */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Position implements Serializable {
+        public static final Position EMPTY = new Position();
 
-        private static final long serialVersionUID = 1L;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate startDate;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
@@ -72,6 +91,9 @@ public class Organization implements Serializable {
         }
 
         public Position(LocalDate startDate, LocalDate endDate, String title, String description) {
+            Objects.requireNonNull(startDate, "startDate must not be null");
+            Objects.requireNonNull(endDate, "endDate must not be null");
+            Objects.requireNonNull(title, "title must not be null");
             this.startDate = startDate;
             this.endDate = endDate;
             this.title = title;
@@ -98,54 +120,21 @@ public class Organization implements Serializable {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
             Position position = (Position) o;
-
-            if (!Objects.equals(startDate, position.startDate)) return false;
-            if (!Objects.equals(endDate, position.endDate)) return false;
-            if (!Objects.equals(title, position.title)) return false;
-
-            return Objects.equals(description, position.description);
+            return Objects.equals(startDate, position.startDate) &&
+                    Objects.equals(endDate, position.endDate) &&
+                    Objects.equals(title, position.title) &&
+                    Objects.equals(description, position.description);
         }
 
         @Override
         public int hashCode() {
-            int result = startDate != null ? startDate.hashCode() : 0;
-            result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
-            result = 31 * result + (title != null ? title.hashCode() : 0);
-            result = 31 * result + (description != null ? description.hashCode() : 0);
-            return result;
+            return Objects.hash(startDate, endDate, title, description);
         }
 
         @Override
         public String toString() {
-            return "Position{" +
-                    "startDate=" + startDate +
-                    ", endDate=" + endDate +
-                    ", title='" + title + '\'' +
-                    ", description='" + description + '\'' +
-                    '}';
+            return "Position(" + startDate + ',' + endDate + ',' + title + ',' + description + ')';
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Organization that = (Organization) o;
-
-        if (!Objects.equals(homePage, that.homePage)) return false;
-
-        boolean flag = Objects.equals(positions, that.positions);
-
-        return Objects.equals(positions, that.positions);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = homePage != null ? homePage.hashCode() : 0;
-        result = 31 * result + (positions != null ? positions.hashCode() : 0);
-        return result;
     }
 }

@@ -27,9 +27,17 @@ public class DataStreamSerializer implements StreamSerializer {
                 Section section = entry.getValue();
                 dos.writeUTF(type.name());
                 switch (type) {
-                    case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) section).getContent());
-                    case ACHIEVEMENT, QUALIFICATIONS -> writeCollection(dos, ((ListSection) section).getItems(), dos::writeUTF);
-                    case EXPERIENCE, EDUCATION -> writeCollection(dos, ((OrganizationSection) section).getOrganizations(), org -> {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        dos.writeUTF(((TextSection) section).getContent());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        writeCollection(dos, ((ListSection) section).getItems(), dos::writeUTF);
+                        break;
+                    case EDUCATION:
+                    case EXPERIENCE:
+                        writeCollection(dos, ((OrganizationSection) section).getOrganizations(), org -> {
                         dos.writeUTF(org.getHomePage().getName());
                         dos.writeUTF(org.getHomePage().getUrl());
                         writeCollection(dos, org.getPositions(), position -> {
@@ -59,27 +67,35 @@ public class DataStreamSerializer implements StreamSerializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            readItems(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readItems(dis, () -> resume.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
             readItems(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
-                resume.addSection(sectionType, readSection(dis, sectionType));
+                resume.setSection(sectionType, readSection(dis, sectionType));
             });
             return resume;
         }
     }
 
     private Section readSection(DataInputStream dis, SectionType sectionType) throws IOException {
-        return switch (sectionType) {
-            case PERSONAL, OBJECTIVE -> new TextSection(dis.readUTF());
-            case ACHIEVEMENT, QUALIFICATIONS -> new ListSection(readList(dis, dis::readUTF));
-            case EXPERIENCE, EDUCATION -> new OrganizationSection(
-                    readList(dis, () -> new Organization(
-                            new Link(dis.readUTF(), dis.readUTF()),
-                            readList(dis, () -> new Organization.Position(
-                                    readLocalDate(dis), readLocalDate(dis), dis.readUTF(), dis.readUTF()
-                            ))
-                    )));
-        };
+        switch (sectionType) {
+            case PERSONAL:
+            case OBJECTIVE:
+                return new TextSection(dis.readUTF());
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+                return new ListSection(readList(dis, dis::readUTF));
+            case EXPERIENCE:
+            case EDUCATION:
+                return new OrganizationSection(
+                        readList(dis, () -> new Organization(
+                                new Link(dis.readUTF(), dis.readUTF()),
+                                readList(dis, () -> new Organization.Position(
+                                        readLocalDate(dis), readLocalDate(dis), dis.readUTF(), dis.readUTF()
+                                ))
+                        )));
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     private <T> List<T> readList(DataInputStream dis, ElementReader<T> reader) throws IOException {

@@ -2,9 +2,11 @@ package com.urise.webapp.model;
 
 import java.util.Objects;
 
-public class TextSection extends Section{
+public class TextSection extends Section {
 
     private static final long serialVersionUID = 1L;
+
+    public static final TextSection EMPTY = new TextSection("");
 
     private String content;
 
@@ -12,10 +14,16 @@ public class TextSection extends Section{
     }
 
     public TextSection(String content) {
+        Objects.requireNonNull(content, "content must not be null");
         this.content = content;
     }
 
     public String getContent() {
+        return content;
+    }
+
+    @Override
+    public String toString() {
         return content;
     }
 
@@ -25,18 +33,13 @@ public class TextSection extends Section{
         if (o == null || getClass() != o.getClass()) return false;
 
         TextSection that = (TextSection) o;
-        return Objects.equals(content, that.content);
+
+        return content.equals(that.content);
+
     }
 
     @Override
     public int hashCode() {
-        return content != null ? content.hashCode() : 0;
-    }
-
-    @Override
-    public String toString() {
-        return "TextSection{" +
-                "content='" + content + '\'' +
-                '}';
+        return content.hashCode();
     }
 }
